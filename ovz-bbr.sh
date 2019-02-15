@@ -40,7 +40,7 @@ directory(){
 }
 
 download(){
-	wget https://raw.githubusercontent.com/tcp-nanqinlang/lkl-rinetd/master/module/rinetd
+  wget --no-check-certificate https://raw.githubusercontent.com/6yue4me/outline/master/rinetd
 	[[ ! -f rinetd ]] && echo -e "${Error} rinetd download failed, please check !" && exit 1
 	chmod +x rinetd
 }
