@@ -3,23 +3,23 @@ Green_font="\033[32m" && Red_font="\033[31m" && Font_suffix="\033[0m"
 Info="${Green_font}[Info]${Font_suffix}"
 Error="${Red_font}[Error]${Font_suffix}"
 echo -e "${Green_font}
-#===============================================
+#===========================================
 # Project: lkl-rinetd
 # Platform: --CentOS --openvz --singleNIC
-#===============================================${Font_suffix}"
+#===========================================${Font_suffix}"
 
 check_system(){
-	[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo -e "${Error} Only support CentOS !" && exit 1
-	[[ "`uname -m`" != "x86_64" ]] && echo -e "${Error} Only support 64bit !" && exit 1
+	[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo -e "${Error} Only support CentOS!" && exit 1
+	[[ "`uname -m`" != "x86_64" ]] && echo -e "${Error} Only support 64bit!" && exit 1
 }
 
 check_root(){
-	[[ "`id -u`" != "0" ]] && echo -e "${Error} Must be root user !" && exit 1
+	[[ "`id -u`" != "0" ]] && echo -e "${Error} Must be root user!" && exit 1
 }
 
 check_ovz(){
 	yum update && yum install -y virt-what
-	[[ "`virt-what`" != "openvz" ]] && echo -e "${Error} Only support OpenVZ !" && exit 1
+	[[ "`virt-what`" != "openvz" ]] && echo -e "${Error} Only support OpenVZ!" && exit 1
 }
 
 check_requirement(){
@@ -29,7 +29,7 @@ check_requirement(){
 	for CMD in iptables grep cut xargs ip awk
 	do
 		if ! type -p ${CMD}; then
-			echo -e "${Error} requirement not found, please check !" && exit 1
+			echo -e "${Error} requirement not found, please check!" && exit 1
 		fi
 	done
 }
@@ -40,8 +40,8 @@ directory(){
 }
 
 download(){
-  wget --no-check-certificate https://raw.githubusercontent.com/6yue4me/outline/master/rinetd
-	[[ ! -f rinetd ]] && echo -e "${Error} rinetd download failed, please check !" && exit 1
+	wget https://raw.githubusercontent.com/tcp-nanqinlang/lkl-rinetd/master/module/rinetd
+	[[ ! -f rinetd ]] && echo -e "${Error} rinetd download failed, please check!" && exit 1
 	chmod +x rinetd
 }
 
@@ -91,7 +91,7 @@ install(){
 status(){
 	if [[ ! -z `ps -A | grep rinetd` ]]; then
 		echo -e "${Info} rinetd-bbr is running !"
-		else echo -e "${Error} rinetd-bbr not running, please check !"
+		else echo -e "${Error} rinetd-bbr not running, please check!"
 	fi
 }
 
