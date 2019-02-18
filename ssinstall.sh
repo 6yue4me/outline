@@ -4,24 +4,29 @@ Green_font="\033[32m" && Red_font="\033[31m" && Font_suffix="\033[0m"
 Info="${Green_font}[Info]${Font_suffix}"
 Error="${Red_font}[Error]${Font_suffix}"
 
-[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo -e "${Error} Only support CentOS !" && exit 1
-[[ "`uname -m`" != "x86_64" ]] && echo -e "${Error} Only support 64bit !" && exit 1
-[[ "`id -u`" != "0" ]] && echo -e "${Error} Must be root user !" && exit 1
+# check env
+[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo -e "${Error} Only support CentOS!" && exit 1
+[[ "`uname -m`" != "x86_64" ]] && echo -e "${Error} Only support 64bit!" && exit 1
+[[ "`id -u`" != "0" ]] && echo -e "${Error} Must be root user!" && exit 1
 
+# install shadowsocks
 yum install -y python-setuptools
 easy_install pip
 pip install shadowsocks
 
+# disable selinux
 if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
 	sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 	setenforce 0
 fi
 
+# disable iptables&firewalld
 service iptables stop
 chkconfig iptables off
 systemctl stop firewalld
 systemctl disable firewalld
 
+# set up config
 echo -e "请输入你想要的VPN密码，然后回车"
 read -p "(若不输入，默认使用 1234567890):" passwd
 [ -z "${passwd}" ] && passwd="1234567890"
@@ -48,8 +53,10 @@ EOF
 echo "1 4 * * 5    /bin/sh /root/restart.sh > /root/restart.log 2>&1" > /var/spool/cron/root
 systemctl restart crond
 
+# start
 /usr/bin/ssserver -c /etc/shadowsocks.json -d start
 
+# print msg
 IP=$( ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egrep -v "^192\.168|^172\.1[6-9]\.|^172\.2[0-9]\.|^172\.3[0-2]\.|^10\.|^127\.|^255\.|^0\." | head -n 1 )
 [ -z ${IP} ] && IP=$( wget -qO- icanhazip.com )
 [ -z ${IP} ] && IP=$( wget -qO- ipinfo.io/ip )
