@@ -1,13 +1,9 @@
 #!/bin/bash
 
-Green_font="\033[32m" && Red_font="\033[31m" && Font_suffix="\033[0m"
-Info="${Green_font}[Info]${Font_suffix}"
-Error="${Red_font}[Error]${Font_suffix}"
-
 # check env
-[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo -e "${Error} Only support CentOS!" && exit 1
-[[ "`uname -m`" != "x86_64" ]] && echo -e "${Error} Only support 64bit!" && exit 1
-[[ "`id -u`" != "0" ]] && echo -e "${Error} Must be root user!" && exit 1
+[[ -z "`cat /etc/redhat-release | grep -iE "CentOS"`" ]] && echo "Only support CentOS!" && exit 1
+[[ "`uname -m`" != "x86_64" ]] && echo "Only support 64bit!" && exit 1
+[[ "`id -u`" != "0" ]] && echo "Must be root user!" && exit 1
 
 # install shadowsocks
 yum install -y python-setuptools
@@ -62,7 +58,7 @@ IP=$( ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egre
 [ -z ${IP} ] && IP=$( wget -qO- ipinfo.io/ip )
 
 if [[ ! -z `ps -A | grep ssserver` ]];then
-    echo -e "${Info} Shadowsocks install successful!"
+    echo "Shadowsocks install successful!"
 	echo "========牢记以下信息========"
 	echo "服务器地址：${IP}"
 	echo "服务器端口：8388"
@@ -70,5 +66,5 @@ if [[ ! -z `ps -A | grep ssserver` ]];then
 	echo "加密：rc4-md5"
 	echo "============================"
 else 
-	echo -e "${Error} Shadowsocks install failed!"
+	echo "Error:Shadowsocks install failed, please try again!"
 fi
