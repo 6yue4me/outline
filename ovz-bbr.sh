@@ -37,10 +37,10 @@ download(){
 
 config-port(){
 	echo "请输入你想加速的端口，然后回车"
-	read -p "(此端口应与ssr的端口一致, 默认使用 8388):" ports
+	read -p "(此端口应与ssr的端口一致, 默认使用 443):" ports
 
 	if [[ -z "${ports}" ]]; then
-		echo -e "0.0.0.0 8388 0.0.0.0 8388\c" >> config-port.conf
+		echo -e "0.0.0.0 443 0.0.0.0 443\c" >> config-port.conf
 	else
 		for port in ${ports}
 		do

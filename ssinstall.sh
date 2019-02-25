@@ -27,10 +27,14 @@ echo -e "请输入你想要的VPN密码，然后回车"
 read -p "(若不输入，默认使用 1234567890):" passwd
 [ -z "${passwd}" ] && passwd="1234567890"
 
+echo -e "请输入你想要的VPN端口，然后回车"
+read -p "(若不输入，默认使用 443:" port
+[ -z "${port}" ] && port="443"
+
 cat > /etc/shadowsocks.json << EOF
 {
 "server":"0.0.0.0",
-"server_port":8388,
+"server_port":$port,
 "local_address": "127.0.0.1",
 "local_port":1080,
 "password":"$passwd",
@@ -59,9 +63,10 @@ IP=$( ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egre
 
 if [[ ! -z `ps -A | grep ssserver` ]];then
     echo "Shadowsocks install successful!"
+	echo -e "\n"
 	echo "========牢记以下信息========"
 	echo "服务器地址：${IP}"
-	echo "服务器端口：8388"
+	echo "服务器端口：${port}"
 	echo "密码：${passwd}"
 	echo "加密：rc4-md5"
 	echo "============================"
