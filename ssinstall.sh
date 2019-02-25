@@ -66,7 +66,6 @@ IP=$( ip addr | egrep -o '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | egre
 if [[ ! -z `ps -A | grep ssserver` ]];then
 	echo -e "\n"
     echo -e "\033[32mShadowsocks install successful!\033[0m"
-	echo -e "\n"
 	echo "========牢记以下信息========"
 	echo "服务器地址：${IP}"
 	echo "服务器端口：${port}"
